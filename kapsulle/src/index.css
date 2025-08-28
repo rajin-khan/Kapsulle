@@ -1,68 +1,130 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/*
+  ==============================================
+  KAPSULLE DUAL-THEME DESIGN SYSTEM
+  ==============================================
+*/
+@theme {
+  /* -------- Base Theme (Light Mode: "Sunlit Parchment") -------- */
+  --color-parchment: #ffe1a8;
+  --color-cream: #fff9ed;
+  --color-terracotta: #e26d5c;
+  --color-russet: #723d46;
+  --color-sage: #a8bba2;
+  --color-peach: #ffd4b8;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  --color-text-primary: var(--color-russet);
+  --color-text-secondary: #8e6a73;
+  --color-text-accent: var(--color-terracotta);
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+  --color-bg-base: var(--color-parchment);
+  --color-bg-surface: var(--color-cream);
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
+  --color-border-subtle: #00000010;
+  --color-border-default: #00000020;
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+  --color-accent-primary: var(--color-terracotta);
+  --color-accent-light: #e8897b;
+  --color-accent-dark: #d5533f;
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  /* -------- Typography (Shared) -------- */
+  --font-serif: "Lora", Georgia, serif;
+
+  /* -------- Spacing (Shared) -------- */
+  --spacing-1: 4px; --spacing-2: 8px; --spacing-3: 12px; --spacing-4: 16px;
+  --spacing-5: 20px; --spacing-6: 24px; --spacing-8: 32px; --spacing-10: 40px;
+  --spacing-12: 48px; --spacing-16: 64px; --spacing-20: 80px; --spacing-24: 96px;
+
+  /* -------- Easing (Shared) -------- */
+  --ease-gentle-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft: cubic-bezier(0.6, 0, 0.4, 1);
+
+  /* -------- Animation Tokens (Shared) -------- */
+  --animate-fade-in-up: fadeInAndUp 500ms var(--ease-soft) both;
+  --animate-bubble-in: bubbleIn 500ms var(--ease-gentle-spring) both;
+  --animate-soft-pulse: softPulse 2.5s ease-in-out infinite;
+  --animate-gradient-shift: gradientShift 15s ease-in-out infinite;
+  --animate-pulse-dot: pulseDot 1.4s ease-in-out infinite both;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* NEW: Dark mode variables defined under a data-theme attribute */
+[data-theme='dark'] {
+  --color-parchment: #3a3238; /* Dark Parchment */
+  --color-cream: #f5f0e6; /* Light text color */
+  --color-terracotta: #ff9a57; /* Golden Hour accent */
+  --color-russet: #2c2528; /* Warm Cinder background */
+  --color-sage: #819b81; /* Muted dark sage */
+  --color-peach: #ff9a5730; /* Golden glow */
+  
+  --color-text-primary: var(--color-cream);
+  --color-text-secondary: #b0a8a3; /* Stone */
+  --color-text-accent: var(--color-terracotta);
+  
+  --color-bg-base: var(--color-russet);
+  --color-bg-surface: var(--color-parchment);
+  
+  --color-border-subtle: #ffffff10;
+  --color-border-default: #ffffff20;
+  
+  --color-accent-primary: var(--color-terracotta);
+  --color-accent-light: #ffae7a;
+  --color-accent-dark: #e8843e;
+}
+
+
+/*
+  ==============================================
+  KAPSULLE KEYFRAME ANIMATIONS & UTILITIES
+  ==============================================
+*/
+@keyframes fadeInAndUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* NEW: A more subtle, lively entrance for chat bubbles */
+@keyframes bubbleIn {
+  from { opacity: 0; transform: scale(0.8) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes softPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.03); opacity: 0.95; }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* NEW: A calmer typing indicator animation */
+@keyframes pulseDot {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/*
+  ==============================================
+  KAPSULLE BASE STYLES & NEW MICRO-INTERACTIONS
+  ==============================================
+*/
+@layer base {
+  body {
+    /* Uses CSS variables so the theme can switch dynamically */
+    @apply bg-bg-base text-text-primary font-serif antialiased;
+    transition: background-color 0.5s ease-soft, color 0.5s ease-soft;
   }
-  a:hover {
-    color: #747bff;
+}
+
+/* NEW: Reusable utility for beautiful hover effects */
+@layer utilities {
+  .hover-lift {
+    @apply transition-all duration-300 ease-gentle-spring;
   }
-  button {
-    background-color: #f9f9f9;
+  .hover-lift:hover {
+    @apply transform -translate-y-1 shadow-2xl;
   }
 }
